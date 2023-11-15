@@ -77,10 +77,8 @@ where area >=  3000000 or population >=25000000
 /* Pandas */
 import pandas as pd
 
-def find_products(products: pd.DataFrame) -> pd.DataFrame:
-    df = products[(products['low_fats'] == 'Y') & (products['recyclable'] == 'Y')]
+def big_countries(world: pd.DataFrame) -> pd.DataFrame:
+    df = world[(world['area'] >= 3000000) | (world['population'] >= 25000000) ]
+    df = df[['name','population','area']]
 
-    df = df[['product_id']]
-    
     return df
-    

@@ -75,6 +75,7 @@ on b.player_id = a.player_id
 and b.event_date = a.next_day    
 
 -- Write your PostgreSQL query statement below
+--OPTION1
 SELECT ROUND(COUNT(distinct a1.player_id)::numeric/(SELECT count(distinct player_id) FROM Activity),2) as fraction 
 FROM Activity a1 
 JOIN Activity a2
