@@ -44,7 +44,7 @@ Output:
 Explanation: 
 Tweet 1 has length = 14. It is a valid tweet.
 Tweet 2 has length = 32. It is an invalid tweet. */
-# Write your MySQL query statement below
+# Write your MySQL query statement below: Approach: Filtering Rows
 select tweet_id
 from tweets
 where length(content) > 15
