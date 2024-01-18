@@ -62,17 +62,14 @@ Explanation: The folowing table is ordered by the turn for simplicity.
 +------+----+-----------+--------+--------------+*/
 # Write your MySQL query statement below
 select person_name
-from queue
-where turn = (
-select max(turn) as turn
-from (
-select turn
-    ,person_name
-    ,sum(weight) over (order by turn) as total_weight
-from queue
-) t
+from 
+(select turn,person_name 
+,sum(weight) over (order by turn) as total_weight
+/* ,sum(weight) over (order by turn rows between unbounded preceding and current row) as cumulatedweight */
+from queue) a 
 where total_weight <= 1000
-);
+order by turn desc
+limit 1
 
 SELECT 
     q1.person_name
@@ -85,17 +82,12 @@ ORDER BY SUM(q2.weight) DESC
 LIMIT 1
 
 /* Write your T-SQL query statement below */
-select person_name
-from queue
-where turn = (
-select max(turn) as turn
-from (
-select turn
-    ,person_name
-    ,sum(weight) over (order by turn) as total_weight
-from queue
-) t
-where total_weight <= 1000);
+select top 1 person_name
+from 
+(select turn,person_name ,sum(weight) over (order by turn) as total_weight
+from queue) a 
+where total_weight <= 1000
+order by turn desc
 
 -- Write your PostgreSQL query statement below
 select person_name

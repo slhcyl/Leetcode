@@ -60,7 +60,10 @@ Output:
 | SecondHighestSalary |
 +---------------------+
 | null                |
-+---------------------+ */
++---------------------+ 
+OFFSET clause 
+indicating how many rows you want to skip (0 if you don’t want to skip any); you then optionally specify the FETCH clause indicating how many rows you want to filter.
+*/
 
 # Write your MySQL query statement below
 SELECT 
@@ -77,6 +80,12 @@ FROM
     Employee
 WHERE 
     salary < (SELECT MAX(salary) FROM Employee);  
+ /*option 2*/   
+select (SELECT DISTINCT salary 
+from Employee
+order by salary desc
+offset 1 rows fetch first 1 rows only) AS SecondHighestSalary 
+
  -- Write your PostgreSQL query statement below
 SELECT 
     MAX(salary) AS SecondHighestSalary
@@ -84,3 +93,18 @@ FROM
     Employee
 WHERE 
     salary < (SELECT MAX(salary) FROM Employee);    
+
+/* editorial */
+SELECT (SELECT DISTINCT salary
+FROM Employee
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1) AS SecondHighestSalary 
+
+SELECT
+    IFNULL(
+      (SELECT DISTINCT Salary
+       FROM Employee
+       ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1),
+    NULL) AS SecondHighestSalary
+

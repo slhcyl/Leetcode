@@ -47,6 +47,20 @@ Output:
 +-----------+
 Explanation: 
 Only the player with id 1 logged back in after the first day he had logged in so the answer is 1/3 = 0.33*/
+# Write your MySQL query statement below: my solution
+with firstlogin as (
+    select player_id
+        ,min(event_date) as first_date
+    from activity
+    group by player_id
+)
+
+select 
+round(count(distinct b.player_id)/count(distinct a.player_id),2) as fraction
+from activity as a
+left join firstlogin as b
+on a.player_id = b.player_id
+and datediff(a.event_date, b.first_date) = 1
 
 # Write your MySQL query statement below
 SELECT ROUND(COUNT(distinct A2.player_id) / COUNT(distinct A1.player_id), 2) As fraction 
@@ -56,8 +70,9 @@ ON A2.player_id = A1.player_id
 AND datediff(A2.event_date, A1.event_date) =  1 
 WHERE (A1.player_id, A1.event_date) IN 
     (SELECT player_id 
-        ,MIN(event_date) 
-        FROM Activity GROUP BY player_id 
+        ,MIN(event_date) as first_login_date
+        FROM Activity 
+        GROUP BY player_id 
     )
 
  /* Write your T-SQL query statement below */

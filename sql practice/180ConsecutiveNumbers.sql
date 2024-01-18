@@ -69,3 +69,13 @@ where a.id = b.id - 1
 and b.id = c.id - 1
 and a.num = b.num
 and b.num = c.num
+
+select distinct num as ConsecutiveNums
+from (
+select num
+, lead(num,1) over (order by id) as num1
+, lead(num,2) over (order by id) as num2
+from Logs
+) t
+where num = num1
+and num1 = num2

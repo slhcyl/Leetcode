@@ -89,6 +89,21 @@ WHERE a.tiv_2015 IN (SELECT tiv_2015
        WHERE pid <> a.pid);
 
 # Write your MySQL query statement below
+select sum(tiv_2016) as tiv_2016
+from 
+(select pid
+,tiv_2015
+,tiv_2016
+,lat
+,lon 
+,count(*) over (partition by tiv_2015) as tiv_2015cnt
+,count(*) over (partition by lat,lon) as locationcnt
+from insurance) as t 
+where tiv_2015cnt > 1
+and locationcnt = 1
+
+
+# Write your MySQL query statement below
 SELECT cast(sum(tiv_2016) as decimal(38,2)) tiv_2016 /*only suuport decimal*/
 FROM Insurance a
 WHERE a.tiv_2015 IN (SELECT tiv_2015
@@ -132,3 +147,28 @@ from insurance
 where tiv_2015 in (select tiv_2015 from tiv_2015)
 and exists (
     select 1 from map where map.lat = insurance.lat and map.lon=insurance.lon);
+
+/* editorial */
+SELECT
+    ROUND(SUM(insurance.TIV_2016),2) AS TIV_2016
+FROM
+    insurance
+WHERE
+    insurance.TIV_2015 IN
+    (
+      SELECT
+        TIV_2015
+      FROM
+        insurance
+      GROUP BY TIV_2015
+      HAVING COUNT(*) > 1
+    )
+    AND CONCAT(LAT, LON) IN
+    (
+      SELECT
+        CONCAT(LAT, LON)
+      FROM
+        insurance
+      GROUP BY LAT , LON
+      HAVING COUNT(*) = 1
+    )

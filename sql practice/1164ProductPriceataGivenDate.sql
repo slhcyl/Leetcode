@@ -48,26 +48,55 @@ Output:
 | 3          | 10    |
 +------------+-------+*/
 # Write your MySQL query statement below
-with prod as (
+with Pd as (
+    select product_id
+        ,max(case when change_date <= '2019-08-16' then change_date end) as change_date
+    from products
+    group by product_id
+)
+
+select a.product_id
+, IFNULL(b.new_price,10) AS price
+from pd as a 
+left join products as b 
+on a.product_id = b.product_id
+and a.change_date = b.change_date
+
+/*Option 2*/
+with allproduct as (
 select distinct product_id
 from products
 )
 
-, prod_date as (
-select a.product_id
-    ,max(case when change_date <= '2019-08-16' then change_date end) as date 
-from prod as a
-left join products as b
-on a. product_id = b.product_id
-group by a.product_id
-)
+select distinct a.product_id
+,IFNULL(lastprice.last_price,10) as price 
+from allproduct as a 
+left join (
+    select product_id
+        ,first_value(new_price) over (partition by product_id order by change_date desc) as last_price
+        from products
+        where change_date <= '2019-08-16'
+) as lastprice
+on a.product_id = lastprice.product_id;
 
-select a.product_id
-    ,COALESCE(b.new_price,10) as price
-from prod_date as a
-left join products as b
-on a.product_id = b.product_id
-and a.date = b.change_date;
+# Write your MySQL query statement below
+with beforechangedate as
+(select product_id, max(change_date) as change_date
+from products
+where change_date <= '2019-08-16'
+group by product_id
+) 
+
+select  a.product_id, b.new_price as price
+from beforechangedate as a 
+join products as b
+on a.product_id = b.product_id and a.change_date = b.change_date
+union
+select product_id, 10 as price
+from products
+group by product_id
+having min(change_date) > '2019-08-16'
+
 
 SELECT
   product_id,

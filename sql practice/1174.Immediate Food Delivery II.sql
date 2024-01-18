@@ -77,3 +77,16 @@ and d.order_date = f.first_order_date
 #     from Delivery
 #     group by customer_id
 # )
+
+/* my approach */
+with customerfirstorder as (
+select customer_id, min(order_date) as first_order_date
+from delivery
+group by customer_id
+)
+
+select round(sum(case when a.order_date = a.customer_pref_delivery_date then 1 else 0 end)/count(a.customer_id) * 100,2) as immediate_percentage 
+from delivery as a
+inner join customerfirstorder as b 
+on a.customer_id = b.customer_id
+and a.order_date = b.first_order_date

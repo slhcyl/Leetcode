@@ -84,3 +84,24 @@ SELECT
 FROM Activities
 GROUP BY sell_date
 ORDER BY sell_date;
+
+/* editorial 
+The most challenging part is sorting and joining all unique names in each group to get the column products. 
+We can use the function GROUP_CONCAT to combine multiple values from multiple rows into a single string. The following shows the syntax of the GROUP_CONCAT() function:
+
+GROUP_CONCAT(
+    DISTINCT expression1
+    ORDER BY expression2
+    SEPARATOR sep
+);
+*/
+SELECT 
+    sell_date,
+    COUNT(DISTINCT(product)) AS num_sold, 
+    GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products
+FROM 
+    Activities
+GROUP BY 
+    sell_date
+ORDER BY 
+    sell_date ASC

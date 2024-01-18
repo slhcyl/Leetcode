@@ -65,6 +65,8 @@ FROM
 WHERE 
     DATEDIFF('2019-07-27', activity_date) < 30 AND DATEDIFF('2019-07-27', activity_date)>=0
 group by activity_date 
+--activity_date BETWEEN '2019-07-27' - INTERVAL 29 DAY AND '2019-07-27’
+--WHERE activity_date BETWEEN DATE_SUB('2019-07-27', INTERVAL 29 DAY) AND '2019-07-27'
 
 /* Write your T-SQL query statement below */
 SELECT 

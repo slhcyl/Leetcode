@@ -51,3 +51,21 @@ Explanation: Bob and George both have a condition that starts with DIAB1. */
 select patient_id, patient_name, conditions
 from patients
 where conditions like 'DIAB1%' or conditions like '% DIAB1%'
+
+/* editorial 
+Approach 1: Using Regular Expression Word Boundaries
+WHERE conditions REGEXP '\\bDIAB1.*': This is the filter condition. It uses the REGEXP operator, which is used for regular expression matching. The regular expression \\bDIAB1.* is applied to the conditions column.
+
+\\b: Represents a word boundary, ensuring that "DIAB1" is a whole word and not part of a larger word.
+
+DIAB1: Matches the specific string "DIAB1".
+
+.*: Matches any characters (zero or more) that come after "DIAB1".
+
+So, the condition is looking for rows where the conditions column starts with the word "DIAB1".
+
+Note: The double backslashes (\\) are used to escape the backslash character in SQL strings, ensuring that it is interpreted as a literal backslash in the regular expression.
+*/
+SELECT patient_id, patient_name, conditions
+FROM Patients
+WHERE conditions REGEXP '\\bDIAB1.*';

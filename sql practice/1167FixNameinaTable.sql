@@ -42,12 +42,13 @@ Output:
 | 2       | Bob   |
 +---------+-------+ */
 -- Write your PostgreSQL query statement below
-select user_id, CONCAT(upper(left(name,1)),lower(substring(name from 2 for length(name)-1))) as name
+select user_id, CONCAT(upper(left(name,1)),lower(substring(name from 2 ))) as name
 from users
 order by user_id
 
--- Write your PostgreSQL query statement below
-select user_id, CONCAT(upper(left(name,1)),lower(substring(name from 2 ))) as name
+# Write your MySQL query statement below
+select user_id
+,concat(upper(left(name,1)),lower(substring(name,2,char_length(name)-1))) as name
 from users
 order by user_id
 
@@ -57,10 +58,12 @@ from users
 order by user_id
 
 # Write your MySQL query statement below
-select user_id, CONCAT(upper(left(name,1)),lower(substring(name from 2 for length(name)-1))) as name
+select user_id, CONCAT(upper(left(name,1)),LOWER(SUBSTRING(name, 2))) as name
 from users
 order by user_id
 
-select user_id, CONCAT(upper(left(name,1)),lower(substring(name, 2 , length(name)-1))) as name
-from users
-order by user_id
+
+/* editorial */
+SELECT user_id, CONCAT(UPPER(SUBSTRING(name, 1, 1)), LOWER(SUBSTRING(name, 2))) AS name
+FROM Users
+ORDER BY user_id;

@@ -48,14 +48,14 @@ Output:
 +-------------+-------+---------------+-------------+
 Explanation: Hercy has 2 people report directly to him, Alice and Bob. Their average age is (41+36)/2 = 38.5, which is 39 after rounding it to the nearest integer.*/
 # Write your MySQL query statement below
-select m.reports_to as employee_id
-  ,e.name
-  ,count(m.employee_id) as reports_count
-  ,round(avg(m.age),0) as average_age
- from employees as m
-inner join employees as e
- on m.reports_to = e.employee_id
-group by m.reports_to,e.name
+select e.employee_id
+,e.name
+,count(m.reports_to) as reports_count
+,round(avg(m.age),0) as average_age
+from Employees as m 
+join Employees as e 
+on m.reports_to = e.employee_id 
+group by e.employee_id, e.name
 order by employee_id
 
 -- Write your PostgreSQL query statement below

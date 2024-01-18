@@ -57,6 +57,54 @@ The mail of user 2 does not have a domain.
 The mail of user 5 has the # sign which is not allowed.
 The mail of user 6 does not have the leetcode domain.
 The mail of user 7 starts with a period. */
+/* editorial 
+Approach: Selecting rows based on conditions
+Algorithm
+In general, if you are asked to match a string, writing a regular expression pattern to match on should come first to mind.
+
+RegEx provides various functionality, here are a few relevant ones:
+
+^: This represents the start of a string or line.
+
+[a-z]: This represents a character range, matching any character from a to z.
+
+[0-9]: This represents a character range, matching any character from 0 to 9.
+
+[a-zA-Z]: This variant matches any character from a to z or A to Z. Note that there is no limit to the number of character ranges you can specify inside the square brackets -- you can add additional characters or ranges you want to match.
+
+[^a-z]: This variant matches any character that is not from a to z. Note that the ^ character is used to negate the character range, which means it has a different meaning inside the square brackets than outside where it means the start.
+
+[a-z]*: This represents a character range, matching any character from a to z zero or more times.
+
+[a-z]+: This represents a character range, matching any character from a to z one or more times.
+
+.: This matches exactly one of any character.
+
+\.: This represents a period character. Note that the backslash is used to escape the period character, as the period character has a special meaning in regular expressions. Also note that in many languages, you need to escape the backslash itself, so you need to use \\..
+
+The dollar sign: This represents the end of a string or line.
+
+The key idea here is to separate the first character of the name column from the rest, change their cases accordingly, and then join them back together.
+[a-zA-Z0-9_.-]*: This part allows any combination of letters, digits, underscores, periods, or hyphens after the initial letter.
+The complete code is as follows:
+SELECT user_id, name, mail: Selects specific columns (user_id, name, and mail) from the Users table.
+
+FROM Users: Specifies the source table as Users.
+
+WHERE mail REGEXP '^[a-zA-Z][a-zA-Z0-9_.-]*\\@leetcode\\.com$': Applies a filter to include only rows where the mail column matches the specified regular expression:
+
+^[a-zA-Z]: Asserts that the email starts with a letter.
+
+[a-zA-Z0-9_.-]*: Matches any sequence of letters, digits, underscores, periods, or hyphens.
+
+\\@leetcode\\.com$: Ensures that the email ends with "@leetcode.com". The backslashes (\\) are used to escape special characters in the regular expression.
+
+The regular expression is designed to validate email addresses based on certain criteria, ensuring that they start with a letter, followed by a combination of letters, digits, underscores, periods, or hyphens, and end with "@leetcode.com". This helps filter and retrieve rows where the email addresses meet the specified pattern.*/
+SELECT user_id, name, mail
+FROM Users
+-- Note that we also escaped the `@` character, as it has a special meaning in some regex flavors
+WHERE mail REGEXP '^[a-zA-Z][a-zA-Z0-9_.-]*\\@leetcode\\.com$';
+
 -- Write your PostgreSQL query statement below
 SELECT *
 FROM Users

@@ -65,12 +65,13 @@ select employee_id
      ,department_id 
 from employee
 where primary_flag = 'Y'
-union
+or employee_id in 
+(
 select employee_id
-     ,department_id 
 from employee 
 group by employee_id
 having count(employee_id) = 1
+) 
 
 SELECT 
   employee_id, 
@@ -86,6 +87,22 @@ FROM
 WHERE 
   EmployeeCount = 1 
   OR primary_flag = 'Y';
+
+/* Write your T-SQL query statement below */
+select employee_id
+     ,department_id 
+from employee
+where primary_flag = 'Y'
+union
+select employee_id
+     ,department_id
+from employee
+where employee_id in (
+select employee_id
+from employee 
+group by employee_id
+having count(employee_id) = 1
+) 
 
   /* Write your T-SQL query statement below */
 SELECT 

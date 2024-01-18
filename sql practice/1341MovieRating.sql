@@ -115,6 +115,7 @@ from MovieRating as mr
 inner join movies as m
 on mr.movie_id = m.movie_id
 where mr.created_at BETWEEN '2020-02-01' AND '2020-02-28'
+/* where extract(year_month from mv.created_at) = 202002 */
 group by m.title
 order by rating desc, title
 limit 1
@@ -222,3 +223,32 @@ from movieRating AS mr
     group by r.title
     order by rating desc, title
 ) t
+
+/* Write your T-SQL query statement below */
+with userrank as  (
+select b.name,a.user_id
+ ,count(b.user_id) as cnt
+ ,rank() over (order by count(b.user_id) desc, b.name) as ranknbr
+from movierating as a 
+join users as b 
+on a.user_id = b.user_id
+group by b.name,a.user_id
+)
+
+, movierank as (
+    select a.movie_id,b.title, round(avg(rating*1.0),2 )as averageRating
+    ,rank() over (order by round(avg(rating*1.0),2 ) desc, b.title) as ranknbr
+    from movierating as a 
+    join movies as b 
+    on a.movie_id = b.movie_id
+    where datepart(month,a.created_at) = 2 and datepart(year,a.created_at) = 2020
+    group by a.movie_id,b.title
+)
+
+select name as results
+from userrank
+where ranknbr = 1
+union all
+select title as results
+from movierank
+where ranknbr = 1

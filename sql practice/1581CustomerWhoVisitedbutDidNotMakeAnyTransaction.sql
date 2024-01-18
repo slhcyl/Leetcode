@@ -79,11 +79,12 @@ Customer with id = 54 visited the mall three times. During 2 visits they did not
 Customer with id = 96 visited the mall once and did not make any transactions.
 As we can see, users with IDs 30 and 96 visited the mall one time without making any transactions. Also, user 54 visited the mall twice and did not make any transactions. */
 # Write your MySQL query statement below
+
 select v.customer_id, count(v.visit_id) as count_no_trans
 from visits as v
 left join transactions as t
-on v.visit_id = t.visit_id
-where t.visit_id is null
+ on v.visit_id = t.visit_id
+ where t.transaction_id is null
 group by v.customer_id
 
 /* pandas */

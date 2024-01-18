@@ -50,7 +50,7 @@ Output:
 +----+---------+
 Explanation: 
 Note that if the number of students is odd, there is no need to change the last one's seat.*/
--- Write your PostgreSQL query statement below
+/* Write your T-SQL query statement below */
 select
 case when COUNT(*) OVER () = id and id % 2 <> 0 then id
     when id % 2 <> 0 and (id + 1) % 2 = 0 then id + 1
@@ -60,19 +60,33 @@ case when COUNT(*) OVER () = id and id % 2 <> 0 then id
 from seat
 order by id;
 
-WITH result(id, student) AS 
-(
-    SELECT id-1 as id , student FROM Seat WHERE id%2=0
+select
+case when COUNT(*) OVER () = id and id % 2 != 0 then id
+    when id % 2 != 0 and COUNT(*) over() != id then id + 1
+    else id - 1
+    end id
+,student
+from seat
+order by id;
 
-    UNION 
-
-    SELECT id+1 as id , student FROM Seat WHERE id%2!=0 and id!=(select count(id) from Seat)
-
-    UNION 
-
-    SELECT id as id , student FROM Seat WHERE id%2!=0 and id=(select count(id) from Seat)
-)
-select * FROM result order by id;
+# Write your MySQL query statement below
+select id
+    ,student
+from seat 
+where id % 2 != 0
+and id = (select count(*) from seat)
+union all
+select id - 1 as id
+    ,student
+from seat
+where id % 2 = 0
+union all
+select id +1 as id
+,student
+from seat
+where id % 2 <>0
+and id != (select count(*) from seat)
+order by id
 
 select id, 
 coalesce(case when id%2=0 then lag(student) over(order by id) else lead(student) over(order by id) end, student) as student
@@ -89,51 +103,18 @@ case when COUNT(*) OVER () = id and id % 2 <> 0 then id
 from seat
 order by id;
 
-WITH result(id, student) AS 
-(
-    SELECT id-1 as id , student FROM Seat WHERE id%2=0
-
-    UNION 
-
-    SELECT id+1 as id , student FROM Seat WHERE id%2!=0 and id!=(select count(id) from Seat)
-
-    UNION 
-
-    SELECT id as id , student FROM Seat WHERE id%2!=0 and id=(select count(id) from Seat)
-)
-
-select * FROM result order by id;
-
-select id, 
-coalesce(case when id%2=0 then lag(student) over(order by id) else lead(student) over(order by id) end, student) as student
-from seat
-order by id
-
-/* Write your T-SQL query statement below */
-select
-case when COUNT(*) OVER () = id and id % 2 <> 0 then id
-    when id % 2 <> 0 and (id + 1) % 2 = 0 then id + 1
-    when id % 2 = 0 and (id - 1) % 2 <> 0 then id - 1
-    end id
-,student
-from seat
-order by id;
-
-select id, 
-coalesce(case when id%2=0 then lag(student) over(order by id) else lead(student) over(order by id) end, student) as student
-from seat
-order by id
-
-WITH result(id, student) AS 
-(
-    SELECT id-1 as id , student FROM Seat WHERE id%2=0
-
-    UNION 
-
-    SELECT id+1 as id , student FROM Seat WHERE id%2!=0 and id!=(select count(id) from Seat)
-
-    UNION 
-
-    SELECT id as id , student FROM Seat WHERE id%2!=0 and id=(select count(id) from Seat)
-)
-select * FROM result order by id
+/* MySQL */
+SELECT
+    (CASE
+        WHEN MOD(id, 2) != 0 AND counts != id THEN id + 1
+        WHEN MOD(id, 2) != 0 AND counts = id THEN id
+        ELSE id - 1
+    END) AS id,
+    student
+FROM
+    seat,
+    (SELECT
+        COUNT(*) AS counts
+    FROM
+        seat) AS seat_counts
+ORDER BY id ASC;
