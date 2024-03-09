@@ -66,3 +66,19 @@ select stock_name
 ,sum(case when operation = 'buy' then -1*price else price end) as capital_gain_loss
 from stocks
 group by stock_name
+
+
+| event_date | player_id |
+| ---------- | --------- |
+| 2019-01-04 | 2         |
+| 2019-01-04 | 4      d   |
+| 2019-01-04 | 7         |
+| 2019-01-04 | 9      d   |
+| 2019-01-04 | 28     d   |
+| 2019-01-04 | 30        |
+| 2019-01-04 | 39      d  |
+| 2019-01-04 | 45        |
+| 2019-01-04 | 51        |
+| 2019-01-04 | 76        |
+| 2019-01-04 | 78        |
+| 2019-01-04 | 87        |
