@@ -60,6 +60,9 @@ union
 select recipient_id, caller_id,  call_time from calls
 )
 
+/* Ranking Calls for Each User on Each Day (CTE: RankedCalls)
+The goal of this step is to identify the first and last calls made by each user on each day.
+These rankings allow us to easily identify the first and last calls of each day for each user, as they will have ranks 1 in their respective ordering. */
 ,summary as (
 select caller_id
 ,recipient_id
@@ -69,7 +72,12 @@ select caller_id
 from population
 -- order by 1,3,4
 )
-
+/* In the final SELECT statement, we filter out rows from RankedCalls where the rank is either 1 in ascending order (rank0) or 1 in descending order (rank1). 
+This effectively selects the first and last calls of each user for each day.
+We then group the results by user_id and call_date.
+The HAVING COUNT(DISTINCT recipient_id) = 1 clause is crucial. It ensures that for each group (user-day combination), 
+there is only one distinct other_participant_id for both the first and last calls. 
+In other words, the user's first and last calls of the day were with the same person. */
 SELECT 
   DISTINCT caller_id user_id 
 FROM 
