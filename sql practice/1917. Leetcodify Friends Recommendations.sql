@@ -91,7 +91,7 @@ Similarly, we can see that users 2 and 3 listened to songs 10, 11, and 12 on the
 # Write your MySQL query statement below
 with friends as (
 select user1_id as user1, user2_id as user2 from Friendship 
-union 
+union all
 select user2_id, user1_id from Friendship
 )
 
