@@ -59,7 +59,30 @@ SELECT SUM(CASE WHEN s.transaction_date = p.start_date OR s.transaction_date = p
 FROM sales s
 JOIN promotions p ON s.promotion_id = p.promotion_id
 
-
+/* 1. What percent of all products in the grocery chain's catalog are both low fat and recyclable?
+    2. What are the top five (ranked in decreasing order) single-channel media types that correspond to the most money the grocery chain had spent on its promotional campaigns?
+    3. % Of sales that had a valid promotion, the VP of marketing wants to know what % of transactions occur on either the very first day or the very last day of a promotion campaign.
+    4. What brands have an average price above $3 and contain at least 2 different products?
+    5. To improve sales, the marketing department runs various types of promotions.
+    The marketing manager would like to analyze the effectiveness of these promotion campaigns.
+    In particular, what percent of our sales transactions had a valid promotion applied?
+    6. We want to run a new promotion for our most successful category of products
+    (we call these categories “product classes”).
+    Can you find out what are the top 3 selling product classes by total sales?
+    7. We are considering running a promo across brands. We want to target
+    customers who have bought products from two specific brands.
+    Can you find out which customers have bought products from both the
+    “Fort West" and the "Golden" brands?
+    8. what %age of products have both non fat and trans fat.
+    9. find top 5 sales products having promotions
+    10. what %age of sales happened on first and last day of the promotion
+    11. Which product had the highest sales with promotions and sales ( basically a where clause on 2 flags)
+    12. Manager want to analyze the how the promotions on certain products are performing.find how the the percent of promoted sales?
+    13. get the top3 product class_id by the total sales.
+    14. Percentage increase in revenue compared to promoted and non-promoted products.
+    15. Products classes that has the highest transactions
+    16. Count of Customers who bought 2 items type (A,B) 
+    */
 
 
 
